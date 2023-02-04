@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.rmi.ServerException;
-import java.rmi.StubNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +44,28 @@ public class StudentController {
             throw new ServerException("Error");
         } else {
             return new ResponseEntity<>(student, HttpStatus.CREATED);
+        }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<Student> updateStudent(@RequestBody Student student) throws StudentNotFoundException {
+        Optional<Student> s = studentService.getStudentById(student.getId());
+        if (s.isPresent()) {
+            Student updatedStudent = studentService.updateStudent(student);
+            return new ResponseEntity<>(updatedStudent, HttpStatus.OK);
+        } else {
+            throw new StudentNotFoundException(student.getId());
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Student> deleteStudent(@PathVariable(value = "id") String id) throws StudentNotFoundException {
+        Optional<Student> student = studentService.getStudentById(id);
+        if (student.isPresent()) {
+            studentService.deleteStudent(student.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            throw new StudentNotFoundException(id);
         }
     }
 

@@ -29,4 +29,13 @@ public class StudentService {
     public Student addNewStudent(Student newStudent) {
         return studentRepository.save(newStudent);
     }
+
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public void deleteStudent(Student student) {
+        studentRepository.delete(student);
+    }
+
 }
